@@ -1,0 +1,31 @@
+{
+	"compilerOptions": {
+		"outDir": "./lib",
+		"target": "es6",
+		"lib": [
+			"dom",
+			"dom.iterable",
+			"esnext"
+		],
+		"module": "esnext",
+		"esModuleInterop": true,
+		"moduleResolution": "node",
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"removeComments": true,
+		"declaration": false,
+		"sourceMap": true,
+		"jsx": "react-jsx",
+		"typeRoots": [
+			"index.d.ts",
+			"node_modules/@types"
+		]
+	},
+	"include": [
+		"./src/**/*.tsx",
+		"./src/**/*.ts"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}
