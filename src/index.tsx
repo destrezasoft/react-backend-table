@@ -14,7 +14,7 @@ import {
 import { BiExport, BiSortDown, BiSortUp } from "react-icons/bi";
 let timer = setTimeout(() => { });
 
-interface Columns {
+export interface Columns {
 	title: string;
 	field: string;
 	sortable: boolean;
@@ -29,7 +29,7 @@ interface Columns {
 	componentValue?: any;
 }
 
-interface Options {
+export interface Options {
 	title: string;
 	url: string;
 	perPage: number[];
@@ -38,9 +38,17 @@ interface Options {
 	columnSearch: boolean;
 }
 
-interface DtProps {
+export interface DtProps {
 	columns: Columns[];
 	options: Options;
+}
+
+export interface columnFilter {
+	filterType: string;
+	filterValue: string;
+}
+export interface LooseObject {
+	[key: string]: columnFilter;
 }
 
 interface paginationData {
@@ -49,13 +57,6 @@ interface paginationData {
 	perPageData: number;
 	globalSearch: string;
 	// columns:obect
-}
-interface column {
-	filterType: string;
-	filterValue: string;
-}
-export interface LooseObject {
-	[key: string]: column;
 }
 
 interface PostData {
