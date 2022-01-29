@@ -1,14 +1,16 @@
 
 # React Backend Data Table 
 
-> Write a project description
+> React Backend data table project build with react type script. All search filter sorting are call backend , data filter show from backend , global search columnsearch and sort are configureable . Its call a http post request after change frontend for new  data retrive 
 
-## React Backend data table project build with react type script. All search filter sorting are call backend , data filter show from backend , global search columnsearch and sort are configureable . Its call a http post request after change frontend for new  data retrive  
+## Prerequisite
 
 This project requires NodeJS (version 14 or later) and NPM.
 [Node](http://nodejs.org/) and [NPM](https://npmjs.org/) are really easy to install.
 To make sure you have them available on your machine,
+use react-bootstrap version  "^2.1.1" and react-icons version "^4.3.1"
 try running the following command.
+
 
 ```sh
 $ npm -v && node -v
@@ -111,9 +113,10 @@ function App() {
 
 ```
 ##  BACKEND API
-All Data from Data Table will get as post data
+All Data from Data Table will get as post data . this is a dummy backend code for use , 
+Follow response value for work properly , "SQL_CALC_FOUND_ROWS" sql cluse use for get total easy way dont worry for that just find out total your won way
 ```js
-        $filter = $this->input->post();		
+    $filter = $this->input->post();		
 		$this->db->select('SQL_CALC_FOUND_ROWS users.id_users AS `id_users`', FALSE);
 		$this->db->select('username');
 		$this->db->select('email');
@@ -134,36 +137,20 @@ All Data from Data Table will get as post data
 		echo json_encode(array('data' =>array("data"=>$result, "total"=> $total) ,"status"=>true));
 ```
 
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-1.  Fork it!
-2.  Create your feature branch: `git checkout -b my-new-feature`
-3.  Add your changes: `git add .`
-4.  Commit your changes: `git commit -am 'Add some feature'`
-5.  Push to the branch: `git push origin my-new-feature`
-6.  Submit a pull request :sunglasses:
 
 ## Credits
+Destraza Soft 
 
-TODO: Write credits
 
-## Built With
-
-* Dropwizard - Bla bla bla
-* Maven - Maybe
-* Atom - ergaerga
-* Love
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/destrezasoft/react-backend-table).
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
 
 ## Authors
 
 * **Ashaduz zaman **   
-* **Adnan  Nuruddin **   
+* **Adnan  Nuruddin **    
 
 ## License
 
