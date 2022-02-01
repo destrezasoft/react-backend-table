@@ -12,7 +12,7 @@ import {
 } from "react-bootstrap";
 
 import { BiExport, BiSortDown, BiSortUp } from "react-icons/bi";
-let timer = setTimeout(() => { });
+let timer = window.setTimeout(() => { });
 
 export interface Columns {
 	title: string;
@@ -252,7 +252,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 		// searchParams["columns"]["email"]
 
 		window.clearTimeout(timer);
-		timer = setTimeout(() => {
+		timer = window.setTimeout(() => {
 			fetch(fetchUrl, {
 				method: "POST",
 				headers: { "Content-Type": "application/x-www-form-urlencoded" },
