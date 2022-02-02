@@ -32,6 +32,8 @@ export interface Columns {
 export interface Options {
 	title: string;
 	url: string;
+	authorization?:string;
+	headerExtraData?: { [key: string] : string };
 	perPage: number[];
 	orderBy: string;
 	orderType: string;
@@ -257,9 +259,21 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 
 		window.clearTimeout(timer);
 		timer = window.setTimeout(() => {
+		
+			const requestHeaders: HeadersInit = new Headers();
+			requestHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+			if(options.authorization !== undefined)
+				requestHeaders.append('Authorization',options.authorization);
+			if(options.headerExtraData !== undefined  ){
+				Object.keys(options.headerExtraData).forEach((k, i) => {
+					if(options.headerExtraData !== undefined)
+						requestHeaders.append(k,options.headerExtraData[k]);
+				});
+			}
+
 			fetch(fetchUrl, {
 				method: "POST",
-				headers: { "Content-Type": "application/x-www-form-urlencoded" },
+				headers: requestHeaders ,
 				body: searchParams,
 			})
 				.then((resp) => {
