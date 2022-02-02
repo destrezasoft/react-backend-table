@@ -140,6 +140,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 		items.push(
 			<Pagination.First
 				disabled={previousFirstDisable}
+				key={'first'}
 				onClick={() => {
 					setPaginationData({
 						...paginationData,
@@ -152,6 +153,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 		items.push(
 			<Pagination.Prev
 				disabled={previousFirstDisable}
+				key={'prev'}
 				onClick={() => {
 					if (paginationData.currentPage !== 1)
 						setPaginationData({
@@ -193,6 +195,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 		items.push(
 			<Pagination.Next
 				disabled={nextlastDisable}
+				key={'next'}
 				onClick={() => {
 					if (paginationData.currentPage < totalPage)
 						setPaginationData({
@@ -206,6 +209,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 		items.push(
 			<Pagination.Last
 				disabled={nextlastDisable}
+				key={'last'}
 				onClick={() => {
 					setPaginationData({
 						...paginationData,
@@ -221,7 +225,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 
 	const makePerPageSelectBox = () => {
 		return options.perPage.map((v, k) => {
-			return <option value={v}>{v}</option>;
+			return <option key={k} value={v}>{v}</option>;
 		});
 	};
 
@@ -281,12 +285,12 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 					return null;
 				}
 				return (
-					<tr>
+					<tr key={key}>
 						{columns.map((v, k) => {
 							// let fieldKey = v.field;
 							if (v.hasComponent) {
-								return <td>{v.componentValue(value)} </td>;
-							} else return <td>{value[v.field]} </td>;
+								return <td key={k}>{v.componentValue(value)} </td>;
+							} else return <td key={k}>{value[v.field]} </td>;
 						})}
 					</tr>
 				);
@@ -312,11 +316,11 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 						{column.title}
 						{column.field === postData.orderBy &&
 							postData.orderType === "asc" ? (
-							<BiSortDown className="float-right" size={20}></BiSortDown>
+							<BiSortDown key={index + 'asc'} className="float-right" size={20}></BiSortDown>
 						) : null}
 						{column.field === postData.orderBy &&
 							postData.orderType === "desc" ? (
-							<BiSortUp className="float-right" size={20}></BiSortUp>
+							<BiSortUp key={index + 'desc'} className="float-right" size={20}></BiSortUp>
 						) : null}
 					</th>
 				);
@@ -336,6 +340,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 				return (
 					<th style={column.thStyle} key={index}>
 						<Form.Control
+						    key = {index+ 'search'}
 							className="float-center"
 							type="text"
 							placeholder="Search ... "
@@ -349,7 +354,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 					</th>
 				);
 			} else {
-				return <th></th>;
+				return <th key = {index } ></th>;
 			}
 		});
 	};
