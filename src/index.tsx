@@ -32,6 +32,8 @@ export interface Columns {
 export interface Options {
 	title: string;
 	url: string;
+	authorization?:string;
+	headerExtraData?: { [key: string] : string };
 	perPage: number[];
 	orderBy: string;
 	orderType: string;
@@ -140,6 +142,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 		items.push(
 			<Pagination.First
 				disabled={previousFirstDisable}
+				key={'first'}
 				onClick={() => {
 					setPaginationData({
 						...paginationData,
@@ -152,6 +155,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 		items.push(
 			<Pagination.Prev
 				disabled={previousFirstDisable}
+				key={'prev'}
 				onClick={() => {
 					if (paginationData.currentPage !== 1)
 						setPaginationData({
@@ -193,6 +197,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 		items.push(
 			<Pagination.Next
 				disabled={nextlastDisable}
+				key={'next'}
 				onClick={() => {
 					if (paginationData.currentPage < totalPage)
 						setPaginationData({
@@ -206,6 +211,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 		items.push(
 			<Pagination.Last
 				disabled={nextlastDisable}
+				key={'last'}
 				onClick={() => {
 					setPaginationData({
 						...paginationData,
@@ -221,7 +227,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 
 	const makePerPageSelectBox = () => {
 		return options.perPage.map((v, k) => {
-			return <option value={v}>{v}</option>;
+			return <option key={k} value={v}>{v}</option>;
 		});
 	};
 
@@ -253,9 +259,21 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 
 		window.clearTimeout(timer);
 		timer = window.setTimeout(() => {
+		
+			const requestHeaders: HeadersInit = new Headers();
+			requestHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+			if(options.authorization !== undefined)
+				requestHeaders.append('Authorization',options.authorization);
+			if(options.headerExtraData !== undefined  ){
+				Object.keys(options.headerExtraData).forEach((k, i) => {
+					if(options.headerExtraData !== undefined)
+						requestHeaders.append(k,options.headerExtraData[k]);
+				});
+			}
+
 			fetch(fetchUrl, {
 				method: "POST",
-				headers: { "Content-Type": "application/x-www-form-urlencoded" },
+				headers: requestHeaders ,
 				body: searchParams,
 			})
 				.then((resp) => {
@@ -281,12 +299,12 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 					return null;
 				}
 				return (
-					<tr>
+					<tr key={key}>
 						{columns.map((v, k) => {
 							// let fieldKey = v.field;
 							if (v.hasComponent) {
-								return <td>{v.componentValue(value)} </td>;
-							} else return <td>{value[v.field]} </td>;
+								return <td key={k}>{v.componentValue(value)} </td>;
+							} else return <td key={k}>{value[v.field]} </td>;
 						})}
 					</tr>
 				);
@@ -312,11 +330,11 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 						{column.title}
 						{column.field === postData.orderBy &&
 							postData.orderType === "asc" ? (
-							<BiSortDown className="float-right" size={20}></BiSortDown>
+							<BiSortDown key={index + 'asc'} className="float-right" size={20}></BiSortDown>
 						) : null}
 						{column.field === postData.orderBy &&
 							postData.orderType === "desc" ? (
-							<BiSortUp className="float-right" size={20}></BiSortUp>
+							<BiSortUp key={index + 'desc'} className="float-right" size={20}></BiSortUp>
 						) : null}
 					</th>
 				);
@@ -336,6 +354,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 				return (
 					<th style={column.thStyle} key={index}>
 						<Form.Control
+						    key = {index+ 'search'}
 							className="float-center"
 							type="text"
 							placeholder="Search ... "
@@ -349,7 +368,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 					</th>
 				);
 			} else {
-				return <th></th>;
+				return <th key = {index } ></th>;
 			}
 		});
 	};
