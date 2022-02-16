@@ -12,8 +12,13 @@ import {
 } from "react-bootstrap";
 
 import { BiExport, BiSortDown, BiSortUp } from "react-icons/bi";
+
 let timer = window.setTimeout(() => { });
 
+const customStyle = {
+	borderWidth: "1px",
+    borderColor: "#e7ecf1"
+};
 export interface Columns {
 	title: string;
 	field: string;
@@ -21,7 +26,7 @@ export interface Columns {
 	columnType?: string;
 	searchable?: boolean;
 	thStyle?: {};
-	tdStyle?: string;
+	tdStyle?: {};
 	visible?: boolean;
 	thClass?: string;
 	tdClass?: string;
@@ -303,8 +308,8 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 						{columns.map((v, k) => {
 							// let fieldKey = v.field;
 							if (v.hasComponent) {
-								return <td key={k}>{v.componentValue(value)} </td>;
-							} else return <td key={k}>{value[v.field]} </td>;
+								return <td key={k} className={v.tdClass} style={v.tdStyle}>{v.componentValue(value)} </td>;
+							} else return <td key={k} className={v.tdClass} style={v.tdStyle}>{value[v.field]} </td>;
 						})}
 					</tr>
 				);
@@ -317,7 +322,8 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 			if (column.sortable === true) {
 				return (
 					<th
-						style={{ textAlign: "left" }}
+						className={column.thClass}
+						style={column.thStyle}
 						key={index}
 						onClick={() => {
 							setPostData({
@@ -340,7 +346,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 				);
 			} else {
 				return (
-					<th style={{ textAlign: "left" }} key={index}>
+					<th style={column.thStyle} key={index}>
 						{column.title}
 					</th>
 				);
@@ -352,7 +358,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 		return columns.map((column, index) => {
 			if (column.searchable) {
 				return (
-					<th style={column.thStyle} key={index}>
+					<th key={index}>
 						<Form.Control
 						    key = {index+ 'search'}
 							className="float-center"
@@ -361,7 +367,6 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 							size="sm"
 							name={column.field}
 							onChange={(e) => {
-								// setTimeout(() => { console.log(e.target.value) } , 5000);
 								setColumnSearchData(e.target.name, e.target.value);
 							}}
 						/>
@@ -382,11 +387,13 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 					<Col md="4">
 						<Card.Title>{options.title}</Card.Title>
 					</Col>
-					<Col className="float-right">
+				</Row>
+				<Row>
+					<Col className="float-left" md="1">
 						<Form.Select
 							size="sm"
-							className="form-control float-right"
-							style={{ width: 80, height: 30 }}
+							className="form-control float-left"
+							style={{height: 35 }}
 							value={paginationData.perPageData}
 							onChange={(e) => {
 								setPaginationData({
@@ -400,7 +407,8 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 							{makePerPageSelectBox()}
 						</Form.Select>
 					</Col>
-					<Col className="float-right">
+					<Col className="float-left" style={{paddingLeft:"0px", paddingTop:"5px"}} md="2"> of {totalData}</Col>
+					<Col className="float-left" md="4">
 						<Pagination
 							size="sm"
 							onClick={(e) => {
@@ -411,7 +419,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 						</Pagination>
 					</Col>
 
-					<Col className="float-right" md="3">
+					<Col className="float-right" md="5">
 						<Form.Control
 							style={{ width: "70%", display: "inline" }}
 							className="float-center"
@@ -448,16 +456,16 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 						/>
 					</Col>
 				</Row>
-				<Table striped bordered hover>
-					<thead>
+				<Table striped bordered hover responsive="sm" borderless={false} style={{marginTop:"10px"}}>
+					<thead style={customStyle}>
 						<tr>{headerPrint()}</tr>
 					</thead>
 					{options.columnSearch === true ? (
-						<thead>
+						<thead style={customStyle}>
 							<tr>{headerSearchPrint()}</tr>
 						</thead>
 					) : null}
-					<tbody>
+					<tbody style={customStyle}>
 						{!isLoading ? (
 							dataList()
 						) : (
