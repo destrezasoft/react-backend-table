@@ -43,6 +43,7 @@ export interface Options {
 	orderBy: string;
 	orderType: string;
 	columnSearch: boolean;
+	reloadMyTable?:any;
 }
 
 export interface DtProps {
@@ -296,7 +297,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 				});
 		}, 500);
 	};
-
+	options.reloadMyTable = fetchEntities();
 	const dataList = () => {
 		if (data) {
 			return data.map((value: any, key: number) => {
