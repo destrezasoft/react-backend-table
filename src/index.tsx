@@ -297,7 +297,8 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 				});
 		}, 500);
 	};
-	options.reloadMyTable = fetchEntities();
+    options.reloadMyTable = fetchEntities;
+
 	const dataList = () => {
 		if (data) {
 			return data.map((value: any, key: number) => {
