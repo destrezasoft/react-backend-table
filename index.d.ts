@@ -4,6 +4,15 @@ import { Columns, Options, columnFilter } from './src';
 export interface LooseObject {
 	[key: string]: columnFilter;
 }
+export interface Options {
+	title: string;
+	url: string;
+	perPage: number[];
+	orderBy: string;
+	orderType: string;
+	columnSearch: boolean;
+	reloadMyTable?: any;
+  }
 
 export interface BackendTableProps {
 	columns: Columns[];
