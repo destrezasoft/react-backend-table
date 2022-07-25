@@ -44,6 +44,7 @@ export interface Options {
 	orderType: string;
 	columnSearch: boolean;
 	reloadMyTable?:any;
+	extraData?: { [key: string] : string };
 }
 
 export interface DtProps {
@@ -249,6 +250,9 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 			postData.globalSearch = paginationData.globalSearch;
 		}
 
+		searchParams.append('extraData' ,JSON.stringify(options.extraData)) ;
+		
+
 		Object.entries(postData ? postData : {}).forEach(([key, value]) => {
 			if (key !== "columns") {
 				searchParams.append(key, value);
@@ -368,7 +372,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 							placeholder="Search ... "
 							size="sm"
 							name={column.field}
-							onChange={(e) => {
+							onChange={(e:any) => {
 								setColumnSearchData(e.target.name, e.target.value);
 							}}
 						/>
@@ -397,7 +401,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 							className="form-control float-left"
 							style={{height: 35 }}
 							value={paginationData.perPageData}
-							onChange={(e) => {
+							onChange={(e:any) => {
 								setPaginationData({
 									...paginationData,
 									perPageData: Number(e.target.value),
@@ -428,7 +432,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 							type="text"
 							placeholder="Search ... "
 							size="sm"
-							onChange={(e) => {
+							onChange={(e:any) => {
 								setGlobalSearch(e.target.value);
 							}}
 						/>
