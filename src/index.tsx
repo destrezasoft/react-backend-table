@@ -386,6 +386,64 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 	// console.log(dtProps.columns[0]);
 	// let options = dtProps.options;
 
+	const exportData = () =>{
+		let currentData = [];
+		let headersTitle: any[] = [];
+		columns.map((column) => {
+			if(!column.hasComponent){
+				headersTitle.push(column.title);
+			}
+		});
+		currentData.push(headersTitle);
+		data.map((value) => {
+			var rows: any[] = [];
+			columns.map((column, index) => {
+				if(!column.hasComponent){
+					rows.push(value[column.field]);
+				}
+			});
+			currentData.push(rows);
+		});
+		exportToCsv('My Data.csv', currentData);
+	}
+
+	const exportToCsv = (filename: string, rows: any[]) => {
+		var processRow = function (row: any[]) {
+			var finalVal = '';
+			for (var j = 0; j < row.length; j++) {
+				var innerValue = row[j] === null || row[j] === undefined ? '' : row[j].toString();
+				if (row[j] instanceof Date) {
+					innerValue = row[j].toLocaleString();
+				};
+				var result = innerValue.replace(/"/g, '""');
+				if (result.search(/("|,|\n)/g) >= 0)
+					result = '"' + result + '"';
+				if (j > 0)
+					finalVal += ',';
+				finalVal += result;
+			}
+			return finalVal + '\n';
+		};
+		
+		var csvFile = '';
+		for (var i = 0; i < rows.length; i++) {
+			csvFile += processRow(rows[i]);
+		}
+		
+		var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+		var link = document.createElement("a");
+		if (link.download !== undefined) { // feature detection
+			// Browsers that support HTML5 download attribute
+			var url = URL.createObjectURL(blob);
+			link.setAttribute("href", url);
+			link.setAttribute("download", filename);
+			link.style.visibility = 'hidden';
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		}
+	}
+
 	return (
 		<Card>
 			<Card.Body>
@@ -457,7 +515,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 							style={{ marginLeft: "5px" }}
 							size={30}
 							onClick={() => {
-								console.log("Export Ex");
+								exportData();
 							}}
 						/>
 					</Col>
