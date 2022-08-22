@@ -10,14 +10,14 @@ import {
 	Col,
 	Spinner,
 } from "react-bootstrap";
-
+import parse from 'html-react-parser';
 import { BiExport, BiSortDown, BiSortUp } from "react-icons/bi";
 
 let timer = window.setTimeout(() => { });
 
 const customStyle = {
 	borderWidth: "1px",
-    borderColor: "#e7ecf1"
+	borderColor: "#e7ecf1"
 };
 export interface Columns {
 	title: string;
@@ -32,19 +32,21 @@ export interface Columns {
 	tdClass?: string;
 	hasComponent?: boolean;
 	componentValue?: any;
+	hasHtml?: boolean;
+	htmlValue?: any;
 }
 
 export interface Options {
 	title: string;
 	url: string;
-	authorization?:string;
-	headerExtraData?: { [key: string] : string };
+	authorization?: string;
+	headerExtraData?: { [key: string]: string };
 	perPage: number[];
 	orderBy: string;
 	orderType: string;
 	columnSearch: boolean;
-	reloadMyTable?:any;
-	extraData?: { [key: string] : string };
+	reloadMyTable?: any;
+	extraData?: { [key: string]: string };
 }
 
 export interface DtProps {
@@ -250,8 +252,8 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 			postData.globalSearch = paginationData.globalSearch;
 		}
 
-		searchParams.append('extraData' ,JSON.stringify(options.extraData)) ;
-		
+		searchParams.append('extraData', JSON.stringify(options.extraData));
+
 
 		Object.entries(postData ? postData : {}).forEach(([key, value]) => {
 			if (key !== "columns") {
@@ -269,21 +271,21 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 
 		window.clearTimeout(timer);
 		timer = window.setTimeout(() => {
-		
+
 			const requestHeaders: HeadersInit = new Headers();
 			requestHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
-			if(options.authorization !== undefined)
-				requestHeaders.append('Authorization',options.authorization);
-			if(options.headerExtraData !== undefined  ){
+			if (options.authorization !== undefined)
+				requestHeaders.append('Authorization', options.authorization);
+			if (options.headerExtraData !== undefined) {
 				Object.keys(options.headerExtraData).forEach((k, i) => {
-					if(options.headerExtraData !== undefined)
-						requestHeaders.append(k,options.headerExtraData[k]);
+					if (options.headerExtraData !== undefined)
+						requestHeaders.append(k, options.headerExtraData[k]);
 				});
 			}
 
 			fetch(fetchUrl, {
 				method: "POST",
-				headers: requestHeaders ,
+				headers: requestHeaders,
 				body: searchParams,
 			})
 				.then((resp) => {
@@ -301,7 +303,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 				});
 		}, 500);
 	};
-    options.reloadMyTable = fetchEntities;
+	options.reloadMyTable = fetchEntities;
 
 	const dataList = () => {
 		if (data) {
@@ -315,7 +317,11 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 							// let fieldKey = v.field;
 							if (v.hasComponent) {
 								return <td key={k} className={v.tdClass} style={v.tdStyle}>{v.componentValue(value)} </td>;
-							} else return <td key={k} className={v.tdClass} style={v.tdStyle}>{value[v.field]} </td>;
+							}
+							else if (v.hasHtml) {
+								return <td key={k} className={v.tdClass} style={v.tdStyle}>{parse(v.htmlValue(value))}</td>;
+							}
+							else return <td key={k} className={v.tdClass} style={v.tdStyle}>{value[v.field]} </td>;
 						})}
 					</tr>
 				);
@@ -366,31 +372,31 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 				return (
 					<th key={index}>
 						<Form.Control
-						    key = {index+ 'search'}
+							key={index + 'search'}
 							className="float-center"
 							type="text"
 							placeholder="Search ... "
 							size="sm"
 							name={column.field}
-							onChange={(e:any) => {
+							onChange={(e: any) => {
 								setColumnSearchData(e.target.name, e.target.value);
 							}}
 						/>
 					</th>
 				);
 			} else {
-				return <th key = {index } ></th>;
+				return <th key={index} ></th>;
 			}
 		});
 	};
 	// console.log(dtProps.columns[0]);
 	// let options = dtProps.options;
 
-	const exportData = () =>{
+	const exportData = () => {
 		let currentData = [];
 		let headersTitle: any[] = [];
 		columns.map((column) => {
-			if(!column.hasComponent){
+			if (!column.hasComponent || !column.hasHtml) {
 				headersTitle.push(column.title);
 			}
 		});
@@ -398,7 +404,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 		data.map((value) => {
 			var rows: any[] = [];
 			columns.map((column, index) => {
-				if(!column.hasComponent){
+				if (!column.hasComponent || !column.hasHtml) {
 					rows.push(value[column.field]);
 				}
 			});
@@ -424,15 +430,15 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 			}
 			return finalVal + '\n';
 		};
-		
+
 		var csvFile = '';
 		for (var i = 0; i < rows.length; i++) {
 			csvFile += processRow(rows[i]);
 		}
-		
+
 		var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
 		var link = document.createElement("a");
-		if (link.download !== undefined) { 
+		if (link.download !== undefined) {
 			// Browsers that support HTML5 download attribute
 			var url = URL.createObjectURL(blob);
 			link.setAttribute("href", url);
@@ -457,9 +463,9 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 						<Form.Select
 							size="sm"
 							className="form-control float-left"
-							style={{height: 35 }}
+							style={{ height: 35 }}
 							value={paginationData.perPageData}
-							onChange={(e:any) => {
+							onChange={(e: any) => {
 								setPaginationData({
 									...paginationData,
 									perPageData: Number(e.target.value),
@@ -471,7 +477,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 							{makePerPageSelectBox()}
 						</Form.Select>
 					</Col>
-					<Col className="float-left" style={{paddingLeft:"0px", paddingTop:"5px"}} md="2"> of {totalData}</Col>
+					<Col className="float-left" style={{ paddingLeft: "0px", paddingTop: "5px" }} md="2"> of {totalData}</Col>
 					<Col className="float-left" md="4">
 						<Pagination
 							size="sm"
@@ -490,7 +496,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 							type="text"
 							placeholder="Search ... "
 							size="sm"
-							onChange={(e:any) => {
+							onChange={(e: any) => {
 								setGlobalSearch(e.target.value);
 							}}
 						/>
@@ -520,7 +526,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 						/>
 					</Col>
 				</Row>
-				<Table striped bordered hover responsive="sm" borderless={false} style={{marginTop:"10px"}}>
+				<Table striped bordered hover responsive="sm" borderless={false} style={{ marginTop: "10px" }}>
 					<thead style={customStyle}>
 						<tr>{headerPrint()}</tr>
 					</thead>

@@ -1,5 +1,5 @@
 {
-  "name": "@ashadbubt/react-backend-table",
+  "name": "react-backend-table",
   "version": "0.1.10",
   "description": "React Backend Bootstrap data table ",
   "main": "lib/index.js",
@@ -32,6 +32,7 @@
     "@types/react": "^17.0.47"
   },
   "dependencies": {
+    "html-react-parser": "^3.0.3",
     "react-bootstrap": "^2.4.0",
     "react-icons": "^4.4.0"
   },
