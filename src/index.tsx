@@ -529,7 +529,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 					</Col>
 				</Row>
 				{totalExpenseAmount > 0 &&
-					<Row>
+					<Row style={{ marginTop: "2px" }}>
 						<h4>Total Expense Amount: {totalExpenseAmount}</h4>
 					</Row>
 				}
