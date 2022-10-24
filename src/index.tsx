@@ -82,6 +82,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [data, setData] = useState([]);
 	const [totalData, setTotalData] = useState<number>(0);
+	const [totalExpenseAmount, setTotalExpenseAmount] = useState<number>(0);
 
 	let initialPostData: PostData;
 
@@ -295,6 +296,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 					setData(response.data.data);
 					// setPaginationData({...paginationData , totalData:response.data.total });
 					setTotalData(parseInt(response.data.total));
+					setTotalExpenseAmount(response.data.totalExpenseAmount ? response.data.totalExpenseAmount : 0);
 					setIsLoading(false);
 				})
 				.catch((error) => {
@@ -526,6 +528,12 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 						/>
 					</Col>
 				</Row>
+				{totalExpenseAmount > 0 &&
+					<Row>
+						<h4>Total Expense Amount: {totalExpenseAmount}</h4>
+					</Row>
+				}
+
 				<Table striped bordered hover responsive="sm" borderless={false} style={{ marginTop: "10px" }}>
 					<thead style={customStyle}>
 						<tr>{headerPrint()}</tr>
