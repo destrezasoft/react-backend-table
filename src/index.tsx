@@ -41,7 +41,7 @@ export interface Options {
 	url: string;
 	authorization?: string;
 	headerExtraData?: { [key: string]: string };
-	perPage: number[];
+	perPage: any[];
 	orderBy: string;
 	orderType: string;
 	columnSearch: boolean;
@@ -65,7 +65,7 @@ export interface LooseObject {
 interface paginationData {
 	paginationStartWith: number;
 	currentPage: number;
-	perPageData: number;
+	perPageData: any;
 	globalSearch: string;
 	// columns:obect
 }
@@ -135,7 +135,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 	const makePagination = () => {
 		// console.log(paginationData);
 		let items = [];
-		let totalPage = Math.ceil(totalData / paginationData.perPageData);
+		let totalPage = Math.ceil(totalData / (paginationData.perPageData !== 'All' ? paginationData.perPageData : 1));
 		let pagePrint = totalPage;
 		let nextlastDisable = true;
 		let previousFirstDisable = true;
@@ -247,9 +247,9 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 		// console.log(postData);
 		let searchParams = new URLSearchParams();
 		if (postData) {
-			postData.limit = paginationData.perPageData;
+			postData.limit = paginationData.perPageData !== 'All' ? paginationData.perPageData : totalData;
 			postData.offset =
-				(paginationData.currentPage - 1) * paginationData.perPageData;
+				(paginationData.currentPage - 1) * (paginationData.perPageData !== 'All' ? paginationData.perPageData : 1);
 			postData.globalSearch = paginationData.globalSearch;
 		}
 
@@ -451,7 +451,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 			document.body.removeChild(link);
 		}
 	}
-
+	console.log(paginationData);
 	return (
 		<Card>
 			<Card.Body>
@@ -470,7 +470,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 							onChange={(e: any) => {
 								setPaginationData({
 									...paginationData,
-									perPageData: Number(e.target.value),
+									perPageData: e.target.value,
 									currentPage: 1,
 									paginationStartWith: 1,
 								});

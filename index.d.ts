@@ -7,12 +7,12 @@ export interface LooseObject {
 export interface Options {
 	title: string;
 	url: string;
-	perPage: number[];
+	perPage: any[];
 	orderBy: string;
 	orderType: string;
 	columnSearch: boolean;
 	reloadMyTable?: any;
-  }
+}
 
 export interface BackendTableProps {
 	columns: Columns[];
