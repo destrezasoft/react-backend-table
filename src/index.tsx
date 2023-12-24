@@ -128,8 +128,6 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 			postData.columns[key].filterType = "like";
 		}
 		setPostData({ ...postData });
-		console.log(postData);
-
 		// setPostData({...postData.columns,[key.filterValue]:value })
 	};
 	const makePagination = () => {
@@ -350,11 +348,11 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 						{column.title}
 						{column.field === postData.orderBy &&
 							postData.orderType === "asc" ? (
-							<BiSortDown key={index + 'asc'} className="float-right" size={20}></BiSortDown>
+							<BiSortUp key={index + 'asc'} className="float-right" size={20}></BiSortUp>
 						) : null}
 						{column.field === postData.orderBy &&
 							postData.orderType === "desc" ? (
-							<BiSortUp key={index + 'desc'} className="float-right" size={20}></BiSortUp>
+							<BiSortDown key={index + 'desc'} className="float-right" size={20}></BiSortDown>
 						) : null}
 					</th>
 				);
@@ -451,7 +449,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 			document.body.removeChild(link);
 		}
 	}
-	console.log(paginationData);
+
 	return (
 		<Card>
 			<Card.Body>
@@ -553,7 +551,6 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 								</td>
 							</tr>
 						)}
-						{console.log(typeof totalData)}
 						{!isLoading && totalData === 0 ? (
 							<tr style={{ textAlign: "center" }}>
 								<td colSpan={columns.length}>No Data Found</td>
