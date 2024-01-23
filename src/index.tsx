@@ -133,7 +133,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 	const makePagination = () => {
 		// console.log(paginationData);
 		let items = [];
-		let totalPage = Math.ceil(totalData / (paginationData.perPageData !== 'All' ? paginationData.perPageData : 1));
+		let totalPage = Math.ceil(totalData / (paginationData.perPageData !== 'All' ? paginationData.perPageData : totalData));
 		let pagePrint = totalPage;
 		let nextlastDisable = true;
 		let previousFirstDisable = true;
