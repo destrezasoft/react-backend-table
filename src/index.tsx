@@ -12,6 +12,7 @@ import {
 } from "react-bootstrap";
 import parse from 'html-react-parser';
 import { BiExport, BiSortDown, BiSortUp } from "react-icons/bi";
+import Select from 'react-select';
 
 let timer = window.setTimeout(() => { });
 
@@ -19,6 +20,7 @@ const customStyle = {
 	borderWidth: "1px",
 	borderColor: "#e7ecf1"
 };
+
 export interface Columns {
 	title: string;
 	field: string;
@@ -34,6 +36,9 @@ export interface Columns {
 	componentValue?: any;
 	hasHtml?: boolean;
 	htmlValue?: any;
+	isMultiSelect?: boolean;
+	selectOptions?: { value: number | string; label: string }[];
+	placeholder?: string;
 }
 
 export interface Options {
@@ -369,23 +374,50 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 	const headerSearchPrint = () => {
 		return columns.map((column, index) => {
 			if (column.searchable) {
-				return (
-					<th key={index}>
-						<Form.Control
-							key={index + 'search'}
-							className="float-center"
-							type="text"
-							placeholder="Search ... "
-							size="sm"
-							name={column.field}
-							onChange={(e: any) => {
-								setColumnSearchData(e.target.name, e.target.value);
-							}}
-						/>
-					</th>
-				);
+				if (column.isMultiSelect && column.selectOptions) {
+					return (
+						<th key={index}>
+							<Select
+								isMulti
+								options={column.selectOptions}
+								className="form-control-sm"
+								placeholder={column.placeholder ? column.placeholder : "Select ..."}
+								onChange={(selectedOptions) => {
+									const values = selectedOptions.map(option => option.value);
+									setColumnSearchData(column.field, values.join('!'));
+								}}
+								styles={{
+									placeholder: (provided) => ({
+										...provided,
+										fontWeight: 'normal', // Change this to 'normal' to make it not bold
+									})
+								}}
+							/>
+						</th>
+					);
+				} else {
+					return (
+						<th key={index}>
+							<Form.Control
+								key={index + 'search'}
+								className="float-center"
+								type="text"
+								placeholder={column.placeholder ? column.placeholder : "Search ..."}
+								size="sm"
+								name={column.field}
+								onChange={(e: any) => {
+									setColumnSearchData(e.target.name, e.target.value);
+								}}
+								style={{
+									height: "38px",
+									margin: "3px"
+								}}
+							/>
+						</th>
+					);
+				}
 			} else {
-				return <th key={index} ></th>;
+				return <th key={index}></th>;
 			}
 		});
 	};
