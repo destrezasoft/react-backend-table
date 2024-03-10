@@ -37,6 +37,7 @@ export interface Columns {
 	hasHtml?: boolean;
 	htmlValue?: any;
 	isMultiSelect?: boolean;
+	isSelect?: boolean;
 	selectOptions?: { value: number | string; label: string }[];
 	placeholder?: string;
 }
@@ -395,7 +396,31 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 							/>
 						</th>
 					);
-				} else {
+				}
+				else if (column.isSelect && column.selectOptions) {
+					return (
+						<th key={index}>
+							<Select
+								options={column.selectOptions}
+								className="form-control-sm"
+								placeholder={column.placeholder ? column.placeholder : "Select ..."}
+								onChange={(selectedOption) => {
+									if (selectedOption) {
+										setColumnSearchData(column.field, String(selectedOption.value));
+									}
+								}}
+								styles={{
+									placeholder: (provided) => ({
+										...provided,
+										fontWeight: 'normal',
+									})
+								}}
+							/>
+						</th>
+					);
+				}
+
+				else {
 					return (
 						<th key={index}>
 							<Form.Control
@@ -421,8 +446,6 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 			}
 		});
 	};
-	// console.log(dtProps.columns[0]);
-	// let options = dtProps.options;
 
 	const exportData = () => {
 		let currentData = [];
