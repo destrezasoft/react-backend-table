@@ -40,6 +40,7 @@ export interface Columns {
 	isSelect?: boolean;
 	selectOptions?: { value: number | string; label: string }[];
 	placeholder?: string;
+	searchBarWidth?: string;
 }
 
 export interface Options {
@@ -391,6 +392,10 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 									placeholder: (provided) => ({
 										...provided,
 										fontWeight: 'normal', // Change this to 'normal' to make it not bold
+									}),
+									control: (provided) => ({
+										...provided,
+										width: column.searchBarWidth // Set the desired width here
 									})
 								}}
 							/>
@@ -413,6 +418,10 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 									placeholder: (provided) => ({
 										...provided,
 										fontWeight: 'normal',
+									}),
+									control: (provided) => ({
+										...provided,
+										width: column.searchBarWidth // Set the desired width here
 									})
 								}}
 							/>
@@ -433,10 +442,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 								onChange={(e: any) => {
 									setColumnSearchData(e.target.name, e.target.value);
 								}}
-								style={{
-									height: "38px",
-									margin: "3px"
-								}}
+								style={column.thStyle}
 							/>
 						</th>
 					);
