@@ -442,7 +442,6 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 								onChange={(e: any) => {
 									setColumnSearchData(e.target.name, e.target.value);
 								}}
-								style={column.thStyle}
 							/>
 						</th>
 					);
