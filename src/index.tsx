@@ -21,6 +21,13 @@ const customStyle = {
 	borderColor: "#e7ecf1"
 };
 
+const stickyHeaderStyle = {
+	position: 'sticky',
+	top: '0',
+	zIndex: '1',
+	backgroundColor: '#fff', // Ensure the background is not transparent
+};
+
 export interface Columns {
 	title: string;
 	field: string;
@@ -593,11 +600,23 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 				}
 
 				<Table striped bordered hover responsive="sm" borderless={false} style={{ marginTop: "10px" }}>
-					<thead style={customStyle}>
+					<thead style={{
+						...customStyle,
+						position: 'sticky',
+						top: '0',
+						zIndex: '1',
+						backgroundColor: '#fff'
+					}}>
 						<tr>{headerPrint()}</tr>
 					</thead>
 					{options.columnSearch === true ? (
-						<thead style={customStyle}>
+						<thead style={{
+							...customStyle,
+							position: 'sticky',
+							top: '40px',
+							zIndex: '1',
+							backgroundColor: '#fff'
+						}}>
 							<tr>{headerSearchPrint()}</tr>
 						</thead>
 					) : null}
