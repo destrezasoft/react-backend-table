@@ -611,11 +611,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 					</thead>
 					{options.columnSearch === true ? (
 						<thead style={{
-							...customStyle,
-							position: 'sticky',
-							top: '40px',
-							zIndex: '1',
-							backgroundColor: '#fff'
+							...customStyle
 						}}>
 							<tr>{headerSearchPrint()}</tr>
 						</thead>
