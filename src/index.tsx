@@ -24,7 +24,6 @@ const customStyle = {
 const stickyHeaderStyle = {
 	position: 'sticky',
 	top: '0',
-	zIndex: '1',
 	backgroundColor: '#fff', // Ensure the background is not transparent
 };
 
