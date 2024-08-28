@@ -24,6 +24,7 @@ const customStyle = {
 const stickyHeaderStyle = {
 	position: 'sticky',
 	top: '0',
+	zIndex: '1',
 	backgroundColor: '#fff', // Ensure the background is not transparent
 };
 
@@ -603,7 +604,7 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 						...customStyle,
 						position: 'sticky',
 						top: '0',
-						zIndex: '1',
+						// zIndex: '1',
 						backgroundColor: '#fff'
 					}}>
 						<tr>{headerPrint()}</tr>
