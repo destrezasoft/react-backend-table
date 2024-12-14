@@ -1,6 +1,6 @@
 {
   "name": "react-backend-table",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "React Backend Bootstrap data table ",
   "main": "lib/index.js",
   "scripts": {
