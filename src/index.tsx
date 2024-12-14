@@ -391,16 +391,16 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 								options={column.selectOptions}
 								className="form-control-sm"
 								placeholder={column.placeholder ? column.placeholder : "Select ..."}
-								onChange={(selectedOptions: any[]) => {
+								onChange={(selectedOptions: any) => {
 									const values = selectedOptions.map((option: any) => option.value);
 									setColumnSearchData(column.field, values.join('!'));
 								}}
 								styles={{
-									placeholder: (provided) => ({
+									placeholder: (provided: any) => ({
 										...provided,
 										fontWeight: 'normal', // Change this to 'normal' to make it not bold
 									}),
-									control: (provided) => ({
+									control: (provided: any) => ({
 										...provided,
 										width: column.searchBarWidth // Set the desired width here
 									})
