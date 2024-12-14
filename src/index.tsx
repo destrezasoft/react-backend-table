@@ -391,8 +391,8 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 								options={column.selectOptions}
 								className="form-control-sm"
 								placeholder={column.placeholder ? column.placeholder : "Select ..."}
-								onChange={(selectedOptions) => {
-									const values = selectedOptions.map(option => option.value);
+								onChange={(selectedOptions: any[]) => {
+									const values = selectedOptions.map((option: any) => option.value);
 									setColumnSearchData(column.field, values.join('!'));
 								}}
 								styles={{
