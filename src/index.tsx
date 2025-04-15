@@ -608,14 +608,14 @@ let BackendTable: FC<DtProps> = ({ columns, options }) => {
 						backgroundColor: '#fff'
 					}}>
 						<tr>{headerPrint()}</tr>
-					</thead>
-					{options.columnSearch === true ? (
-						<thead style={{
-							...customStyle
-						}}>
+						{options.columnSearch === true ? (
+							// <thead style={{
+							// 	...customStyle
+							// }}>
 							<tr>{headerSearchPrint()}</tr>
-						</thead>
-					) : null}
+							// </thead>
+						) : null}
+					</thead>
 					<tbody style={customStyle}>
 						{!isLoading ? (
 							dataList()
