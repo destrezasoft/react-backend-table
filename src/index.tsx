@@ -307,11 +307,11 @@ const BackendTable = forwardRef<unknown, DtProps>(({ columns, options }, ref) =>
 						options={column.selectOptions}
 						className="form-control-sm"
 						placeholder={column.placeholder || "Select ..."}
-						onChange={(selected) => {
+						onChange={(selected: any) => {
 							const values = selected.map((opt: any) => opt.value).join("!");
 							setColumnSearchData(column.field, values);
 						}}
-						styles={{ control: (base) => ({ ...base, width: column.searchBarWidth }) }}
+						styles={{ control: (base: any) => ({ ...base, width: column.searchBarWidth }) }}
 					/>
 				</th>
 			);
@@ -323,7 +323,7 @@ const BackendTable = forwardRef<unknown, DtProps>(({ columns, options }, ref) =>
 						className="form-control-sm"
 						placeholder={column.placeholder || "Select ..."}
 						onChange={(opt: any) => opt && setColumnSearchData(column.field, opt.value)}
-						styles={{ control: (base) => ({ ...base, width: column.searchBarWidth }) }}
+						styles={{ control: (base: any) => ({ ...base, width: column.searchBarWidth }) }}
 					/>
 				</th>
 			);
