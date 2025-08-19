@@ -16,6 +16,7 @@
 		"declaration": false,
 		"sourceMap": true,
 		"jsx": "react-jsx",
+		"skipLibCheck": true,
 		"typeRoots": [
 			"index.d.ts",
 			"node_modules/@types"

@@ -1,11 +1,4 @@
-import React, {
-	FC,
-	useEffect,
-	useState,
-	useImperativeHandle,
-	forwardRef
-} from "react";
-import "react-bootstrap";
+import React, { FC, useEffect, useState, useImperativeHandle, forwardRef } from "react";
 import {
 	Table,
 	Card,
@@ -27,11 +20,6 @@ const customStyle = {
 	borderColor: "#e7ecf1"
 };
 
-const stickyHeaderStyle: React.CSSProperties = {
-	position: 'sticky',
-	top: 0,
-	backgroundColor: '#fff'
-};
 
 export interface Columns {
 	title: string;
@@ -64,6 +52,7 @@ export interface Options {
 	orderBy: string;
 	orderType: string;
 	columnSearch: boolean;
+	reloadMyTable?: any;
 	extraData?: { [key: string]: string };
 }
 
@@ -118,6 +107,7 @@ const BackendTable = forwardRef<unknown, DtProps>(({ columns, options }, ref) =>
 		};
 	});
 
+
 	const [paginationData, setPaginationData] = useState<paginationData>({
 		paginationStartWith: 1,
 		currentPage: 1,
@@ -138,6 +128,7 @@ const BackendTable = forwardRef<unknown, DtProps>(({ columns, options }, ref) =>
 		postData.columns![key].filterType = "like";
 		setPostData({ ...postData });
 	};
+
 
 	const makePagination = () => {
 		let items = [];
@@ -208,6 +199,7 @@ const BackendTable = forwardRef<unknown, DtProps>(({ columns, options }, ref) =>
 		));
 	};
 
+
 	const fetchEntities = () => {
 		setIsLoading(true);
 		let fetchUrl = options.url;
@@ -264,6 +256,7 @@ const BackendTable = forwardRef<unknown, DtProps>(({ columns, options }, ref) =>
 		reload: fetchEntities
 	}));
 
+
 	const dataList = () => {
 		return data.map((value: any, key: number) => (
 			<tr key={key}>
@@ -275,6 +268,7 @@ const BackendTable = forwardRef<unknown, DtProps>(({ columns, options }, ref) =>
 			</tr>
 		));
 	};
+
 
 	const headerPrint = () => columns.map((column, index) => (
 		<th className={column.thClass} style={column.thStyle} key={index}
@@ -374,65 +368,111 @@ const BackendTable = forwardRef<unknown, DtProps>(({ columns, options }, ref) =>
 		<Card>
 			<Card.Body>
 				<Row>
-					<Col md="4"><Card.Title>{options.title}</Card.Title></Col>
+					<Col md="4">
+						<Card.Title>{options.title}</Card.Title>
+					</Col>
 				</Row>
 				<Row>
-					<Col md="1">
+					<Col className="float-left" md="1">
 						<Form.Select
 							size="sm"
+							className="form-control float-left"
+							style={{ height: 35 }}
 							value={paginationData.perPageData}
-							onChange={(e) => setPaginationData({
-								...paginationData,
-								perPageData: e.target.value,
-								currentPage: 1,
-								paginationStartWith: 1,
-							})}
-						>{makePerPageSelectBox()}</Form.Select>
+							onChange={(e: any) => {
+								setPaginationData({
+									...paginationData,
+									perPageData: e.target.value,
+									currentPage: 1,
+									paginationStartWith: 1,
+								});
+							}}
+						>
+							{makePerPageSelectBox()}
+						</Form.Select>
 					</Col>
-					<Col md="2"> of {totalData}</Col>
-					<Col md="4"><Pagination size="sm">{makePagination()}</Pagination></Col>
-					<Col md="5">
+					<Col className="float-left" style={{ paddingLeft: "0px", paddingTop: "5px" }} md="2"> of {totalData}</Col>
+					<Col className="float-left" md="4">
+						<Pagination
+							size="sm"
+							onClick={(e) => {
+								console.log();
+							}}
+						>
+							{makePagination()}
+						</Pagination>
+					</Col>
+
+					<Col className="float-right" md="5">
 						<Form.Control
 							style={{ width: "70%", display: "inline" }}
+							className="float-center"
 							type="text"
-							placeholder="Search ..."
+							placeholder="Search ... "
 							size="sm"
-							onChange={(e) => setGlobalSearch(e.target.value)}
+							onChange={(e: any) => {
+								setGlobalSearch(e.target.value);
+							}}
 						/>
+
 						<Button
-							variant="success"
-							size="sm"
+							variant="outline"
+							className="btn btn-success btn-lg "
 							style={{ marginLeft: "10px" }}
-							onClick={() =>
+							size="sm"
+							onClick={() => {
 								setPaginationData({
 									...paginationData,
 									globalSearch: globalSearchText,
 									currentPage: 1,
 									paginationStartWith: 1,
-								})
-							}>
+								});
+							}}
+						>
 							Show
 						</Button>
-						<BiExport size={30} style={{ marginLeft: "5px" }} onClick={exportData} />
+						<BiExport
+							style={{ marginLeft: "5px" }}
+							size={30}
+							onClick={() => {
+								exportData();
+							}}
+						/>
 					</Col>
 				</Row>
+				{totalExpenseAmount > 0 &&
+					<Row style={{ marginTop: "2px" }}>
+						<h4>Total Expense Amount: {totalExpenseAmount}</h4>
+					</Row>
+				}
 
-				{totalExpenseAmount > 0 && (
-					<Row><h4>Total Expense Amount: {totalExpenseAmount}</h4></Row>
-				)}
-
-				<Table striped bordered hover responsive style={{ marginTop: "10px" }}>
-					<thead style={stickyHeaderStyle}>
+				<Table striped bordered hover responsive="sm" borderless={false} style={{ marginTop: "10px" }}>
+					<thead style={{
+						...customStyle,
+						position: 'sticky',
+						top: '0',
+						backgroundColor: '#fff'
+					}}>
 						<tr>{headerPrint()}</tr>
-						{options.columnSearch && <tr>{headerSearchPrint()}</tr>}
+						{options.columnSearch === true ? (
+							<tr>{headerSearchPrint()}</tr>
+						) : null}
 					</thead>
 					<tbody style={customStyle}>
-						{!isLoading ? dataList() : (
-							<tr><td colSpan={columns.length}><Spinner animation="border" /></td></tr>
+						{!isLoading ? (
+							dataList()
+						) : (
+							<tr style={{ textAlign: "center" }}>
+								<td colSpan={columns.length}>
+									<Spinner animation="border" role="status"></Spinner>
+								</td>
+							</tr>
 						)}
-						{!isLoading && totalData === 0 && (
-							<tr><td colSpan={columns.length}>No Data Found</td></tr>
-						)}
+						{!isLoading && totalData === 0 ? (
+							<tr style={{ textAlign: "center" }}>
+								<td colSpan={columns.length}>No Data Found</td>
+							</tr>
+						) : null}
 					</tbody>
 				</Table>
 			</Card.Body>
