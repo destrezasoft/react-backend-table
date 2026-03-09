@@ -89,7 +89,7 @@ const BackendTable = forwardRef<unknown, DtProps>(({ columns, options }, ref) =>
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [data, setData] = useState([]);
 	const [totalData, setTotalData] = useState<number>(0);
-	const [totalExpenseAmount, setTotalExpenseAmount] = useState<number>(0);
+	const [totalExpenseAmount, setTotalExpenseAmount] = useState<number | string>('');
 
 	let initialPostData: PostData = {
 		globalSearch: "",
@@ -242,7 +242,7 @@ const BackendTable = forwardRef<unknown, DtProps>(({ columns, options }, ref) =>
 				.then(response => {
 					setData(response.data.data);
 					setTotalData(parseInt(response.data.total));
-					setTotalExpenseAmount(response.data.totalExpenseAmount || 0);
+					setTotalExpenseAmount(response.data.totalExpenseAmount || '');
 					setIsLoading(false);
 				})
 				.catch(error => {
@@ -339,7 +339,7 @@ const BackendTable = forwardRef<unknown, DtProps>(({ columns, options }, ref) =>
 	const exportData = () => {
 		let rows = [columns.map(c => c.title)];
 		data.forEach((item) => {
-			let row = columns.map(c => (!c.hasComponent && !c.hasHtml) ? item[c.field] : '');
+			let row = columns.map(c => !c.hasComponent ? item[c.field] : '');
 			rows.push(row);
 		});
 		exportToCsv("My Data.csv", rows);
@@ -440,7 +440,7 @@ const BackendTable = forwardRef<unknown, DtProps>(({ columns, options }, ref) =>
 						/>
 					</Col>
 				</Row>
-				{totalExpenseAmount > 0 &&
+				{totalExpenseAmount !== '' &&
 					<Row style={{ marginTop: "2px" }}>
 						<h4>Total Expense Amount: {totalExpenseAmount}</h4>
 					</Row>
