@@ -339,7 +339,7 @@ const BackendTable = forwardRef<unknown, DtProps>(({ columns, options }, ref) =>
 	const exportData = () => {
 		let rows = [columns.map(c => c.title)];
 		data.forEach((item) => {
-			let row = columns.map(c => !c.hasComponent ? item[c.field] : '');
+			let row = columns.map(c => (item[c.field] === "action" ? '' : item[c.field]));
 			rows.push(row);
 		});
 		exportToCsv("My Data.csv", rows);
